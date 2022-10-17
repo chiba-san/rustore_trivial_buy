@@ -11,8 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import ru.rustore.sdk.billingclient.utils.resolveForBilling
 import com.sample.android.trivialbuy.databinding.FragmentPurchasesBinding
 import com.sample.android.trivialbuy.ui.main.adapters.PurchasesAdapter
+import ru.rustore.sdk.core.exception.RuStoreException
 
 class PurchasesFragment : Fragment() {
 
@@ -51,7 +53,10 @@ class PurchasesFragment : Fragment() {
 
         viewModel.ruStoreException
             .onEach {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                if (it is RuStoreException) {
+                    it.resolveForBilling(requireContext())
+                }
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 

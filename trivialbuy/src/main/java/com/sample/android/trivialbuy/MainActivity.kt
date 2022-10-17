@@ -1,5 +1,6 @@
 package com.sample.android.trivialbuy
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
+import ru.rustore.sdk.billingclient.RuStoreBillingClient
 import com.sample.android.trivialbuy.databinding.ActivityMainBinding
 import com.sample.android.trivialbuy.ui.main.ProductsFragment
 import com.sample.android.trivialbuy.ui.main.PurchasesFragment
@@ -28,6 +30,15 @@ class MainActivity : AppCompatActivity() {
                 else -> throw IllegalStateException()
             }
         }.attach()
+
+        if (savedInstanceState == null) {
+            RuStoreBillingClient.onNewIntent(intent)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        RuStoreBillingClient.onNewIntent(intent)
     }
 
     class DemoAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {

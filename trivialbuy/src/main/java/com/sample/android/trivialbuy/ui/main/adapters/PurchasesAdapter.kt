@@ -4,15 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ru.rustore.sdk.billingclient.model.purchase.Purchase
 import com.sample.android.trivialbuy.R
 import com.sample.android.trivialbuy.databinding.PurchaseItemBinding
 
 class PurchasesAdapter(
     private val doOnConfirm: (String) -> Unit
 ) : RecyclerView.Adapter<PurchasesAdapter.PurchaseHolder>() {
-    private var purchases: List<String> = emptyList()
+    private var purchases: List<Purchase> = emptyList()
 
-    fun updateAdapter(purchases: List<String>) {
+    fun updateAdapter(purchases: List<Purchase>) {
         this.purchases = purchases
         notifyDataSetChanged()
     }
@@ -30,9 +31,13 @@ class PurchasesAdapter(
 
         private val binding = PurchaseItemBinding.bind(view)
 
-        fun bind(purchase: String) {
-
-            binding.confirm.setOnClickListener { doOnConfirm.invoke(purchase) }
+        fun bind(purchase: Purchase) {
+            binding.textView1.text = purchase.purchaseId
+            binding.textView2.text = purchase.productId
+            binding.textView3.text = purchase.purchaseState.toString()
+            binding.confirm.setOnClickListener {
+                purchase.purchaseId?.let { doOnConfirm.invoke(it) }
+            }
         }
     }
 }

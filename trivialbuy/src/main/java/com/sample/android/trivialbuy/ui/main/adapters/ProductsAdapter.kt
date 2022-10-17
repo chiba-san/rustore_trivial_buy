@@ -4,15 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ru.rustore.sdk.billingclient.model.product.Product
 import com.sample.android.trivialbuy.R
 import com.sample.android.trivialbuy.databinding.ProductItemBinding
 
 class ProductsAdapter(
     private val doOnBuy: (String) -> Unit
 ) : RecyclerView.Adapter<ProductsAdapter.ProductHolder>() {
-    private var products: List<String> = emptyList()
+    private var products: List<Product> = emptyList()
 
-    fun updateAdapter(products: List<String>) {
+    fun updateAdapter(products: List<Product>) {
         this.products = products
         notifyDataSetChanged()
     }
@@ -30,9 +31,11 @@ class ProductsAdapter(
 
         private val binding = ProductItemBinding.bind(view)
 
-        fun bind(product: String) {
-
-            binding.buy.setOnClickListener { doOnBuy.invoke(product) }
+        fun bind(product: Product) {
+            binding.textView1.text = product.productId
+            binding.textView2.text = product.priceLabel
+            binding.textView3.text = product.productStatus.toString()
+            binding.buy.setOnClickListener { doOnBuy.invoke(product.productId) }
         }
     }
 }
